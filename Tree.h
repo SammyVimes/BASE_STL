@@ -17,35 +17,74 @@ public :
         */
     }
 
-    TreeNode<T> getRoot() {
+    TreeNode<T>* getRoot() {
         return root;
     }
 
     class WideIterator {
+    public:
+        WideIterator(Tree<T>* tree) {
+            this->tree = tree;
+            TreeNode<T>* root = this->tree->getRoot();
+            query = new List<TreeNode<T>*>();
+            query->add(root);
+        }
 
+        TreeNode<T>* getNext() {
+            cur = query->get(0);
+            query->remove(0);
+            if (cur == NULL) {
+                return NULL;
+            }
+            if (cur->hasChildren()) {
+                List<TreeNode<T>*>* children = cur->getChildren();
+                for (int i = 0; i < children->getSize(); i++) {
+                    query->add(children->get(i));
+                }
+            }
+            return cur;
+        }
+
+    private:
+        List<TreeNode<T>*>* query;
+        TreeNode<T>* cur;
+        Tree<T>* tree;
     };
+
+
+    WideIterator* getIterator() {
+        return new WideIterator(this);
+    }
 
     class DepthIterator {
 
     };
 
 private :
-    TreeNode<T> root;
+    TreeNode<T>* root;
 };
 
 template <class T> class TreeNode {
 public:
 
     TreeNode() {
-        children = new List<T>();
+        children = new List<TreeNode<T>*>();
     }
 
-    List<TreeNode<T>*> getChildren() {
+    List<TreeNode<T>*>* getChildren() {
         return children;
     }
 
-    T getElement() {
-        return element;
+    T getValue() {
+        return value;
+    }
+
+    bool hasChildren() {
+        bool res = true;
+        if (children->getSize() == 0) {
+            res = false;
+        }
+        return res;
     }
 
     void setValue(const T value) {
@@ -58,7 +97,7 @@ public:
 
 private:
     T value;
-    List<TreeNode<T>*> children;
+    List<TreeNode<T>*>* children;
 
 };
 

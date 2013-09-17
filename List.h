@@ -107,6 +107,7 @@ public:
             }
             count++;
         }
+        size--;
     }
 
 private:
