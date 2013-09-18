@@ -57,6 +57,7 @@ public:
         }
         if (position > size) {
             tail->setNext(newNode);
+            tail = newNode;
         }
         Node<T>* curElem = head;
         int count = 0;
