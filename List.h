@@ -70,8 +70,10 @@ public:
                     newNode->setNext(curElem);
                     prevElem->setNext(newNode);
                 }
+                size++;
                 break;
             }
+            count++;
             prevElem = curElem;
             curElem = curElem->getNext();
         } while (curElem != NULL);
