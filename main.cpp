@@ -36,5 +36,6 @@ int main()
         a++;
         cur = iter->getNext();
     }
+    delete tree;
     return 0;
 }

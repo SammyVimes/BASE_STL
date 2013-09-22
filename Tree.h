@@ -12,9 +12,11 @@ public :
     }
 
     ~Tree() {
-        /*
-        * Implement with wide search
-        */
+        WideIterator* iterator = getIterator();
+        TreeNode<T>* cur;
+        while ((cur = iterator->getNext()) != NULL) {
+            delete cur;
+        }
     }
 
     TreeNode<T>* getRoot() {
@@ -69,6 +71,11 @@ public:
 
     TreeNode() {
         children = new List<TreeNode<T>*>();
+    }
+
+    ~TreeNode() {
+        delete children;
+        delete value;
     }
 
     List<TreeNode<T>*>* getChildren() {
