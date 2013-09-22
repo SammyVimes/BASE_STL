@@ -49,6 +49,19 @@ public:
         size++;
     }
 
+    bool hasElem (const T value) {
+        bool res = false;
+        Node* cur = head;
+        while (cur != NULL) {
+            T curVal = cur->get();
+            if (val == curVal) {
+                res = true;
+                break;
+            }
+        }
+        return res;
+    }
+
     void add(const T value, int position) {
         Node<T>* newNode = new Node<T>();
         newNode->setValue(value);

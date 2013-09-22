@@ -75,7 +75,6 @@ public:
 
     ~TreeNode() {
         delete children;
-        delete value;
     }
 
     List<TreeNode<T>*>* getChildren() {
