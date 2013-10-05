@@ -30,10 +30,11 @@ public:
         return array[i];
     }
 
-    void remove(const int i) {
-        if (i < 0 || i >= size) {
-            return;
+    T remove(const int i) {
+        if (i < 0 || i >= arrayLength || size <= 0) {
+            return NULL;
         }
+        T elem = array[i];
         array[i] = NULL;
         size--;
         recentlyRemovedQuantity++;
@@ -43,6 +44,7 @@ public:
                 recentlyRemovedQuantity = 0;
             }
         }
+        return elem;
     }
 
     int getSize() {
@@ -77,6 +79,7 @@ private:
                 count++;
             }
         }
+        size = count;
         arrayLength -= 12;
         delete tmpQuery;
     }
@@ -85,6 +88,9 @@ private:
         T* tmpQuery = array;
         arrayLength += 12;
         array = new T[arrayLength];
+        for (int i = 0; i < arrayLength; i++) {
+            array[i] = NULL;
+        }
         for (int i = 0; i < size; i++) {
             array[i] = tmpQuery[i];
         }

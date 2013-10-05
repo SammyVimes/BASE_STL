@@ -5,7 +5,9 @@ HEADERS += \
     List.h \
     Stack.h \
     Tree.h \
-    ArrayVector.h
+    ArrayVector.h \
+    QueryVector.h
+
 
 
 
