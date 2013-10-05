@@ -1,5 +1,5 @@
-#ifndef QUERYVECTOR_H
-#define QUERYVECTOR_H
+#ifndef ARRAYVECTOR_H
+#define ARRAYVECTOR_H
 
 using namespace std;
 
@@ -55,6 +55,15 @@ public:
         return arrayLength;
     }
 
+    void doReform() {
+        if (arrayLength - size > 12) {
+            decreaseMemory();
+            recentlyRemovedQuantity = 0;
+        } else {
+            reform();
+        }
+    }
+
     ~ArrayVector() {
         size = 0;
         arrayLength = 0;
@@ -84,6 +93,20 @@ private:
         delete tmpQuery;
     }
 
+    void reform() {
+        T prev;
+        for (int i = 0; i < arrayLength; i++) {
+            T cur = array[i];
+            if (i != 0) {
+                if (prev == NULL) {
+                    array[i - 1] = cur;
+                    array[i] = NULL;
+                }
+            }
+            prev = array[i];
+        }
+    }
+
     void increaseMemory() {
         T* tmpQuery = array;
         arrayLength += 12;
@@ -98,4 +121,4 @@ private:
     }
 };
 
-#endif // QUERYVECTOR_H
+#endif // ARRAYVECTOR_H

@@ -1,17 +1,15 @@
 #include <iostream>
-#include "ArrayVector.h"
+#include "QueryVector.h"
 
 int main()
 {
-    ArrayVector<int>* vector = new ArrayVector<int>();
-    for (int i = 1; i < 15; i++) {
-        vector->add(i);
+    QueryVector<int>* query = new QueryVector<int>();
+    for (int i = 1; i < 160; i++) {
+        query->add(i);
     }
-    for (int i = 0; i < 13; i++) {
-        vector->remove(i);
-    }
-    for (int i = 0; i < vector->getSize(); i++) {
-        cout << vector->get(i) << endl;
+    int size = query->getSize();
+    for (int i = 0; i < size; i++) {
+        cout << query->get() << endl;
     }
     return 0;
 }

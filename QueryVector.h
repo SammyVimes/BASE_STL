@@ -21,7 +21,12 @@ public:
     T get() {
         T element = query->get(0);
         query->remove(0);
+        query->doReform();
         return element;
+    }
+
+    int getSize() {
+        query->getSize();
     }
 
 private:
