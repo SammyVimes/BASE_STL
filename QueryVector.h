@@ -26,7 +26,7 @@ public:
     }
 
     int getSize() {
-        query->getSize();
+        return query->getSize();
     }
 
 private:
