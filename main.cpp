@@ -3,13 +3,13 @@
 
 int main()
 {
-    QueryVector<int>* query = new QueryVector<int>();
-    for (int i = 1; i < 160; i++) {
+    ArrayVector<int>* query = new ArrayVector<int>();
+    for (int i = 0; i < 160; i++) {
         query->add(i);
     }
-    int size = query->getSize();
-    for (int i = 0; i < size; i++) {
-        cout << query->get() << endl;
+    for (int i = 1; i < 15; i++) {
+        query->remove(i);
     }
+    cout << query->get(0) << "  " << query->get(1) << endl;
     return 0;
 }

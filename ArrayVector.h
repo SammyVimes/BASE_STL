@@ -2,14 +2,19 @@
 #define ARRAYVECTOR_H
 
 using namespace std;
+#define NULL_FLAG 0
+
+typedef unsigned char byte;
 
 template <class T> class ArrayVector {
 
 public:
+
     ArrayVector() {
         arrayLength = 12;
         size = 0;
-        array = new T[arrayLength];
+        array = pickMemory(arrayLength);
+        metaData = pickMetadataMemory(arrayLength);
         recentlyRemovedQuantity = 0;
     }
 
@@ -18,6 +23,7 @@ public:
             increaseMemory();
         }
         array[size] = element;
+        setMetadataValue(size, 1);
         size++;
     }
 
@@ -35,7 +41,8 @@ public:
             return NULL;
         }
         T elem = array[i];
-        array[i] = NULL;
+        array[i] = NULL_FLAG;
+        setMetadataValue(i, 0);
         size--;
         recentlyRemovedQuantity++;
         if (recentlyRemovedQuantity > 12) {
@@ -73,51 +80,118 @@ public:
 
 private:
     T* array;
+    byte* metaData;
     int arrayLength;
     int size;
 
     int recentlyRemovedQuantity;
 
     void decreaseMemory() {
-        T* tmpQuery = array;
-        array = new T[arrayLength - 12];
+        T* tmpArray = array;
+        byte* tmpMeta = metaData;
+        array = pickMemory(arrayLength - 12);
+        metaData = pickMetadataMemory(arrayLength - 12);
         int count = 0;
         for (int i = 0; i < arrayLength; i++) {
-            if (tmpQuery[i] != NULL) {
-                array[count] = tmpQuery[i];
+            if (isValuable(tmpMeta, i)) {
+                array[count] = tmpArray[i];
                 count++;
             }
         }
+        for (int i = 0; i < size; i++) {
+            setMetadataValue(i, 1);
+        }
         size = count;
         arrayLength -= 12;
-        delete tmpQuery;
+        delete tmpArray;
+        delete tmpMeta;
     }
 
     void reform() {
-        T prev;
+        byte prev;
+        int count = 0;
         for (int i = 0; i < arrayLength; i++) {
             T cur = array[i];
             if (i != 0) {
-                if (prev == NULL) {
-                    array[i - 1] = cur;
-                    array[i] = NULL;
+                if (prev == 0) {
+                    array[count] = cur;
+                    count++;
                 }
             }
-            prev = array[i];
+            prev = getByte(metaData, i);
+        }
+        delete metaData;
+        metaData = pickMetadataMemory(arrayLength);
+        for (int i = 0; i < count; i++) {
+            setMetadataValue(i, 1);
         }
     }
 
     void increaseMemory() {
-        T* tmpQuery = array;
+        T* tmpArray = array;
+        byte* tmpMeta = metaData;
         arrayLength += 12;
-        array = new T[arrayLength];
-        for (int i = 0; i < arrayLength; i++) {
-            array[i] = NULL;
-        }
+        array = pickMemory(arrayLength);
+        metaData = pickMetadataMemory(arrayLength);
         for (int i = 0; i < size; i++) {
-            array[i] = tmpQuery[i];
+            array[i] = tmpArray[i];
         }
-        delete tmpQuery;
+        int mod = size % 8;
+        int div = size / 8;
+        int metaSize = div;
+        if (mod != 0) {
+            metaSize++;
+        }
+        for (int i = 0; i < metaSize; i++) {
+            metaData[i] = tmpMeta[i];
+        }
+        delete tmpArray;
+        delete tmpMeta;
+    }
+
+    T* pickMemory(const int size) {
+        T* memory = new T[size];
+        for (int i = 0; i < size; i++) {
+            memory[i] = NULL_FLAG;
+        }
+        return memory;
+    }
+
+    bool isValuable(const byte* byteArray, const int pos) {
+        byte datByte = getByte(byteArray, pos);
+        byte mask = 1 << (pos % 8);
+        return (mask & datByte);
+    }
+
+    byte getByte(const byte* byteArray, const int pos) {
+        int div = pos / 8;
+        return byteArray[div];
+    }
+
+    void setMetadataValue(const int pos, const int value) {
+        int mod = pos % 8;
+        int div = pos / 8;
+        byte m = metaData[div];
+        if (value == 0) {
+            m = ~(1 << mod) & m;
+        } else {
+            m = 1 << mod | m;
+        }
+        metaData[div] = m;
+    }
+
+    byte* pickMetadataMemory(const int arraySize) {
+        int mod = arraySize % 8;
+        int div = arraySize / 8;
+        int size = div;
+        if (mod != 0) {
+            size++;
+        }
+        byte* meta = new byte[size];
+        for (int i = 0; i < size; i++) {
+            meta[i] = 0;
+        }
+        return meta;
     }
 };
 
