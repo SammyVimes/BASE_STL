@@ -6,7 +6,9 @@ HEADERS += \
     Stack.h \
     Tree.h \
     ArrayVector.h \
-    QueryVector.h
+    QueryVector.h \
+    BinaryTree.h
+
 
 
 
