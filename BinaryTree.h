@@ -48,13 +48,19 @@ public:
             }
             Node<T>* left = cur->getLeft();
             Node<T>* right = cur->getRight();
-            if (left == NULL || right == NULL) {
+            if (left == NULL && right == NULL) {
+                children--;
                 continue;
             }
-            query->add(left);
-            query->add(right);
+            if (left != NULL) {
+                query->add(left);
+                tmpChildren++;
+            }
+            if (right != NULL) {
+                query->add(right);
+                tmpChildren++;
+            }
             children--;
-            tmpChildren += 2;
         }
     }
 
