@@ -41,7 +41,7 @@ public:
             return NULL;
         }
         T elem = array[i];
-        array[i] = NULL_FLAG;
+        array[i] = NULL;
         setMetadataValue(i, 0);
         size--;
         recentlyRemovedQuantity++;
@@ -76,6 +76,7 @@ public:
         arrayLength = 0;
         recentlyRemovedQuantity = 0;
         delete array;
+        delete metaData;
     }
 
 private:
@@ -108,17 +109,21 @@ private:
     }
 
     void reform() {
-        byte prev;
+        bool prev = true;
         int count = 0;
         for (int i = 0; i < arrayLength; i++) {
             T cur = array[i];
-            if (i != 0) {
-                if (prev == 0) {
-                    array[count] = cur;
-                    count++;
+            if (isValuable(metaData, i)) {
+                if (i != 0) {
+                    if (!prev) {
+                        array[count] = cur;
+                        prev = false;
+                    }
                 }
+                count++;
+            } else {
+                prev = isValuable(metaData, i);
             }
-            prev = getByte(metaData, i);
         }
         delete metaData;
         metaData = pickMetadataMemory(arrayLength);
@@ -152,7 +157,7 @@ private:
     T* pickMemory(const int size) {
         T* memory = new T[size];
         for (int i = 0; i < size; i++) {
-            memory[i] = NULL_FLAG;
+            memory[i] = NULL;
         }
         return memory;
     }
