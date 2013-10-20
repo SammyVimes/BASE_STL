@@ -24,6 +24,20 @@ int main() {
     right = el->getRight();
     left->setLeft(19);
     right->setRight(21);
-    cout << tree->branchesToGo(999) << endl;
+    int quantity = 0;
+    bool exists = false;
+    int val = 1000000;
+    BinaryTree<int>::WideIterator* iter = tree->getIterator();
+    tmp = iter->getNext();
+    while(tmp) {
+        if (tmp->get() == val) {
+            quantity++;
+            exists = true;
+        }
+        tmp = iter->getNext();
+    }
+    delete iter;
+    cout << exists << endl << quantity << endl;
+    cout << endl << tree->branchesToGo(val) << endl;
     return 0;
 }

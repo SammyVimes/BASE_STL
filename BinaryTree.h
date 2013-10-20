@@ -68,6 +68,44 @@ public:
         return root;
     }
 
+
+
+    class WideIterator {
+    public:
+        WideIterator(BinaryTree<T>* tree) {
+            this->tree = tree;
+            Node<T>* root = this->tree->getRoot();
+            query = new QueryVector<Node<T>*>();
+            query->add(root);
+        }
+
+        Node<T>* getNext() {
+            cur = query->get();
+            if (cur == NULL) {
+                return NULL;
+            }
+            Node<T>* left = cur->getLeft();
+            Node<T>* right = cur->getRight();
+            if (left != NULL) {
+                query->add(left);
+            }
+            if (right != NULL) {
+                query->add(right);
+            }
+            return cur;
+        }
+
+    private:
+        QueryVector<Node<T>*>* query;
+        Node<T>* cur;
+        BinaryTree<T>* tree;
+    };
+
+
+    WideIterator* getIterator() {
+        return new WideIterator(this);
+    }
+
 private:
     T elem;
     Node<T>* root;
