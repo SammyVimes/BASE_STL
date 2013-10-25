@@ -109,7 +109,46 @@ public :
     }
 
     char* toString() {
-
+        Stack<TreeNode<T>*>* stack = new Stack<TreeNode<T>*>();
+        Stack<int>* childStack = new Stack<int>();
+        int n = 0;
+        int curSize = 1;
+        char* str = new char[100];
+        stack->push(root);
+        while(true) {
+            bool notEmpty = true;
+            do {
+                if (curSize == 0) {
+                    str[n] = ')';
+                    n++;
+                    curSize = childStack->pop();
+                    if (childStack->getSize() == 0) { //если TRUE, значит, мы только что
+                        notEmpty = false;             //вытащили текущий номер для корня
+                    }
+                }
+            } while(!curSize && notEmpty);
+            TreeNode<T>* cur = stack->pop();
+            if (!cur) {
+                str[n] = 0;
+                str[n + 1] = 0;
+                break;
+            }
+            str[n] = cur->getValue();
+            n++;
+            curSize--;
+            List<TreeNode<T>*>* children = cur->getChildren();
+            int size = children->getSize();
+            if (size != 0) {
+                childStack->push(curSize);
+                curSize = size;
+                str[n] = '(';
+                n++;
+            }
+            for (int i = (size - 1); i >= 0; i--) {
+                stack->push(children->get(i));
+            }
+        }
+        return str;
     }
 
     TreeNode<T>* getRoot() {

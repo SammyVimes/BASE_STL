@@ -41,7 +41,9 @@ int main() {
 //    int n = 0;
 //    tree->setRoot(enterTree(fileContent, n));
 //    int z = tree->branchesToGo('j');
-    char* string = "q(abc(def))";
+    char* string = "q(a(KP(v)RF)bc(def(12)(d(4))))";
     Tree<char>* tree = Tree<char>::createFromString(string);
+    char* t = tree->toString();
+    cout << endl << t << endl << endl;
     return 0;
 }
