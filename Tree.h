@@ -19,8 +19,43 @@ public :
         }
     }
 
+    List<TreeNode<T>*>* fillTree(char* string, TreeNode<T>* parent, int &n) {
+        TreeNode<T>* cur = parent;
+        List<TreeNode<T>*>* childrenList = new List<TreeNode<T>*>();
+        while (true) {
+            char ch = string[n];
+            n++;
+            if (ch == '(') {
+                List<TreeNode<T>*>* tmp = fillTree(string, cur, n);
+                for (int i = 0; i < tmp->getSize(); i++) {
+                    cur->addChildren(tmp->get(i));
+                }
+            } else if (ch == ')') {
+                if (string[n + 1] == '(') {
+                    continue;
+                }
+                break;
+            } else if (ch == 0) {
+                break;
+            } else {
+                cur = new TreeNode<T>();
+                cur->setValue(ch);
+                childrenList->add(cur);
+            }
+        }
+        return childrenList;
+    }
+
+    char* toString() {
+
+    }
+
     TreeNode<T>* getRoot() {
         return root;
+    }
+
+    void setRoot(TreeNode<char>* root) {
+        this->root = root;
     }
 
     class WideIterator {
@@ -81,6 +116,10 @@ public:
         return children;
     }
 
+    void setChildren(List<TreeNode<T>*>* children) {
+        this->children = children;
+    }
+
     T getValue() {
         return value;
     }
@@ -99,6 +138,16 @@ public:
 
     void addChildren() {
         children->add(new TreeNode<T>());
+    }
+
+    void addChildren(T value) {
+        TreeNode<T>* node = new TreeNode<T>();
+        node->getValue(value);
+        children->add(node);
+    }
+
+    void addChildren(TreeNode<T>* node) {
+        children->add(node);
     }
 
 private:

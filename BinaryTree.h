@@ -27,6 +27,10 @@ public:
         }
     }
 
+    void setRoot(Node<T>* root) {
+        this->root = root;
+    }
+
     int branchesToGo(const T elem) {
         QueryVector<Node<T>*>* query = new QueryVector<Node<T>*>();
         int floor = 0;
@@ -67,6 +71,7 @@ public:
     Node<T>* getRoot() {
         return root;
     }
+
 
 
 
@@ -138,6 +143,15 @@ public:
 
         Node<T>* getRight() {
             return right;
+        }
+
+
+        void setLeftPointer(Node<T>* left) {
+            this->left = left;
+        }
+
+        void setRightPointer(Node<T>* right) {
+            this->right = right;
         }
 
         void set(const T elem) {
