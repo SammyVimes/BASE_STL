@@ -113,8 +113,8 @@ public :
         Stack<int>* childStack = new Stack<int>();
         int n = 0;
         int curSize = 1;
-        char* str = new char[100];
-        stack->push(root);
+        char* str = new char[100]; //TODO: написать адекватное высчитывание длинны строки
+        stack->push(root);         //или использовать вектор
         while(true) {
             bool notEmpty = true;
             do {
