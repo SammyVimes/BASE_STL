@@ -3,7 +3,60 @@
 #include "List.h"
 #include "Stack.h"
 
-template <class T> class TreeNode;
+template <class T> class TreeNode {
+public:
+
+    TreeNode() {
+        children = new List<TreeNode<T>*>();
+    }
+
+    ~TreeNode() {
+        delete children;
+    }
+
+    List<TreeNode<T>*>* getChildren() {
+        return children;
+    }
+
+    void setChildren(List<TreeNode<T>*>* children) {
+        this->children = children;
+    }
+
+    T getValue() {
+        return value;
+    }
+
+    bool hasChildren() {
+        bool res = true;
+        if (children->getSize() == 0) {
+            res = false;
+        }
+        return res;
+    }
+
+    void setValue(T value) {
+        this->value = value;
+    }
+
+    void addChildren() {
+        children->add(new TreeNode<T>());
+    }
+
+    void addChildren(T value) {
+        TreeNode<T>* node = new TreeNode<T>();
+        node->getValue(value);
+        children->add(node);
+    }
+
+    void addChildren(TreeNode<T>* node) {
+        children->add(node);
+    }
+
+private:
+    T value;
+    List<TreeNode<T>*>* children;
+
+};
 
 template <class T> class Tree {
 public :
@@ -17,6 +70,15 @@ public :
         while ((cur = iterator->getNext()) != NULL) {
             delete cur;
         }
+    }
+
+    static Tree<T>* createFromString(char* string) {
+        Tree<char>* tree = new Tree<char>();
+        TreeNode<char>* root = tree->getRoot();
+        root->setValue(string[0]);
+        int n = 1;
+        tree->fillTree(string, root, n);
+        return tree;
     }
 
     List<TreeNode<T>*>* fillTree(char* string, TreeNode<T>* parent, int &n) {
@@ -99,61 +161,6 @@ public :
 
 private :
     TreeNode<T>* root;
-};
-
-template <class T> class TreeNode {
-public:
-
-    TreeNode() {
-        children = new List<TreeNode<T>*>();
-    }
-
-    ~TreeNode() {
-        delete children;
-    }
-
-    List<TreeNode<T>*>* getChildren() {
-        return children;
-    }
-
-    void setChildren(List<TreeNode<T>*>* children) {
-        this->children = children;
-    }
-
-    T getValue() {
-        return value;
-    }
-
-    bool hasChildren() {
-        bool res = true;
-        if (children->getSize() == 0) {
-            res = false;
-        }
-        return res;
-    }
-
-    void setValue(const T value) {
-        this->value = value;
-    }
-
-    void addChildren() {
-        children->add(new TreeNode<T>());
-    }
-
-    void addChildren(T value) {
-        TreeNode<T>* node = new TreeNode<T>();
-        node->getValue(value);
-        children->add(node);
-    }
-
-    void addChildren(TreeNode<T>* node) {
-        children->add(node);
-    }
-
-private:
-    T value;
-    List<TreeNode<T>*>* children;
-
 };
 
 #endif // TREE_H

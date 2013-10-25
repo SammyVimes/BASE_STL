@@ -42,10 +42,6 @@ int main() {
 //    tree->setRoot(enterTree(fileContent, n));
 //    int z = tree->branchesToGo('j');
     char* string = "q(abc(def))";
-    Tree<char>* tree = new Tree<char>();
-    TreeNode<char>* nd = new TreeNode<char>();
-    int n = 0;
-    List<TreeNode<char>*>* rootChrildren = tree->fillTree(string, nd, n);
-    tree->setRoot(rootChrildren->get(0));
+    Tree<char>* tree = Tree<char>::createFromString(string);
     return 0;
 }
