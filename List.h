@@ -5,7 +5,7 @@
 
 using namespace std;
 
-template <class T> class Node;
+template <class T> class ListNode;
 
 template <class T> class List {
 
@@ -20,7 +20,7 @@ public:
                         return NULL;
                 }
                 T returnValue = NULL;
-                Node<T> *cur = head;
+                ListNode<T> *cur = head;
                 for (int i = 0; i < (n + 1); i++) {
                         if (i != n) {
                                 cur = cur->getNext();
@@ -38,12 +38,12 @@ public:
 
         void add(const T value) {
                 if (head == NULL) {
-                        head = new Node<T>();
+                        head = new ListNode<T>();
                         head->setValue(value);
                         tail = head;
                 }
                 else {
-                        Node<T> *newElement = new Node<T>();
+                        ListNode<T> *newElement = new ListNode<T>();
                         newElement->setValue(value);
                         tail->setNext(newElement);
                         tail = newElement;
@@ -55,7 +55,7 @@ public:
 
         char* toString() {
             char* string = new char[2*size + 1];
-            Node<T>* cur = head;
+            ListNode<T>* cur = head;
             int count = 0;
             while (cur != NULL) {
                 string[count] = cur->get();
@@ -71,7 +71,7 @@ public:
         bool hasElem(const T value) {
                 bool res = false;
                 bool ololo = false;
-                Node<T>* cur = head;
+                ListNode<T>* cur = head;
                 while (cur != 0) {
                         T curVal = cur->get();
                         if (value == curVal) {
@@ -89,7 +89,7 @@ public:
         }
 
         void add(const T value, int position) {
-                Node<T>* newNode = new Node<T>();
+                ListNode<T>* newNode = new ListNode<T>();
                 newNode->setValue(value);
                 if (position < 0) {
                         position = 0;
@@ -100,9 +100,9 @@ public:
                         size++;
                         return;
                 }
-                Node<T>* curElem = head;
+                ListNode<T>* curElem = head;
                 int count = 0;
-                Node<T>* prevElem = NULL;
+                ListNode<T>* prevElem = NULL;
                 do {
                         if (count == position) {
                                 if (curElem == head) {
@@ -122,18 +122,18 @@ public:
                 } while (curElem != NULL);
         }
 
-        Node<T>* getHead() {
+        ListNode<T>* getHead() {
                 return this->head;
         }
 
-        Node<T>* getTail() {
+        ListNode<T>* getTail() {
                 return this->tail;
         }
 
         void remove(const int n) {
-                Node<T>* curElem = head;
+                ListNode<T>* curElem = head;
                 int count = 0;
-                Node<T>* prevElem = NULL;
+                ListNode<T>* prevElem = NULL;
                 while (curElem != NULL) {
                         if (count == n) {
                                 if (prevElem == NULL) {
@@ -159,14 +159,14 @@ public:
         }
 
 private:
-        Node<T> *head;
-        Node<T> *tail;
+        ListNode<T> *head;
+        ListNode<T> *tail;
         int size;
 };
 
-template <class T> class Node {
+template <class T> class ListNode {
 public:
-        Node() {
+        ListNode() {
                 next = NULL;
         }
 
@@ -174,11 +174,11 @@ public:
                 return value;
         }
 
-        void setNext(Node<T> *next) {
+        void setNext(ListNode<T> *next) {
                 this->next = next;
         }
 
-        Node<T>* getNext() {
+        ListNode<T>* getNext() {
                 return next;
         }
         void setValue(const T value) {
@@ -186,7 +186,7 @@ public:
         }
 private:
         T value;
-        Node *next;
+        ListNode *next;
 };
 
 #endif // LIST_H

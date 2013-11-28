@@ -12,8 +12,12 @@ public:
         list->add(element, 0);
     }
 
+    T peek() {
+        return list->getHead()->get();
+    }
+
     T pop() {
-        Node<T>* head = list->getHead();
+        ListNode<T>* head = list->getHead();
         if (head == NULL) {
             return NULL;
         }

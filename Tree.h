@@ -109,25 +109,25 @@ public :
     }
 
     char* toString() {
-        Stack<TreeNode<T>*>* stack = new Stack<TreeNode<T>*>();
-        Stack<int>* childStack = new Stack<int>();
+        Stack<TreeNode<T>*>* childStack = new Stack<TreeNode<T>*>();
+        Stack<int>* childQuantityStack = new Stack<int>();
         int n = 0;
         int curSize = 1;
         char* str = new char[100]; //TODO: написать адекватное высчитывание длинны строки
-        stack->push(root);         //или использовать вектор
+        childStack->push(root);         //или использовать вектор
         while(true) {
             bool notEmpty = true;
             do {
                 if (curSize == 0) {
                     str[n] = ')';
                     n++;
-                    curSize = childStack->pop();
-                    if (childStack->getSize() == 0) { //если TRUE, значит, мы только что
+                    curSize = childQuantityStack->pop();
+                    if (childQuantityStack->getSize() == 0) { //если TRUE, значит, мы только что
                         notEmpty = false;             //вытащили текущий номер для корня
                     }
                 }
             } while(!curSize && notEmpty);
-            TreeNode<T>* cur = stack->pop();
+            TreeNode<T>* cur = childStack->pop();
             if (!cur) {
                 str[n] = 0;
                 str[n + 1] = 0;
@@ -139,13 +139,13 @@ public :
             List<TreeNode<T>*>* children = cur->getChildren();
             int size = children->getSize();
             if (size != 0) {
-                childStack->push(curSize);
+                childQuantityStack->push(curSize);
                 curSize = size;
                 str[n] = '(';
                 n++;
             }
             for (int i = (size - 1); i >= 0; i--) {
-                stack->push(children->get(i));
+                childStack->push(children->get(i));
             }
         }
         return str;

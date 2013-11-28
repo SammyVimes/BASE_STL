@@ -7,7 +7,15 @@ HEADERS += \
     Tree.h \
     ArrayVector.h \
     QueryVector.h \
-    BinaryTree.h
+    BinaryTree.h \
+    GraphVisualization.h \
+    AVLTree.h \
+    NodeFactory.h \
+    QueryList.h
+
+
+
+
 
 
 

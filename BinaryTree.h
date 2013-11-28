@@ -3,6 +3,7 @@
 
 
 #include "QueryVector.h"
+#include "NodeFactory.h"
 
 template <class T> class Node;
 
@@ -13,11 +14,12 @@ template <class T> class BinaryTree {
 public:
 
     BinaryTree() {
+        _isAVL = false;
         root = new Node<T>();
     }
 
     ~BinaryTree() {
-        QueryVector<BinaryTree<T>*>* query = new QueryVector<BinaryTree*>();
+        QueryVector<Node<T>*>* query = new QueryVector<Node<T>*>();
         query->add(this->getRoot());
         while(query->getSize() > 0) {
             Node<T>* cur = query->get();
@@ -29,6 +31,10 @@ public:
 
     void setRoot(Node<T>* root) {
         this->root = root;
+    }
+
+    void setIsAVL(bool _isAVL) {
+       this->_isAVL = _isAVL;
     }
 
     int branchesToGo(const T elem) {
@@ -72,7 +78,9 @@ public:
         return root;
     }
 
-
+    bool isAVL() {
+        return _isAVL;
+    }
 
 
     class WideIterator {
@@ -114,11 +122,13 @@ public:
 private:
     T elem;
     Node<T>* root;
+    bool _isAVL;
 };
 
 template <class T> class Node {
 public:
         Node() {
+            elem = NULL;
             left = NULL;
             right = NULL;
         }
