@@ -3,17 +3,19 @@
 #include <QFile>
 #include <QString>
 #include <QByteArray>
-#include "AVLTree.h"
+#include <QCryptographicHash>
+
+#include "HashMap.h"
 
 using namespace std;
-
+using namespace containers;
+#define final const
 
 int main() {
-    AVLTree<int>* tree = new AVLTree<int>();
-    AVLNode<int>* node = tree->getRoot();
-    node->setLeft(5);
-    node->setKey(5);
-    bool isAvl = tree->isAVL();
-    int key = node->get();
+    HashMap<QString, int>* map = new HashMap<QString, int>();
+    QString str("10");
+    map->put(str, 10);
+    str = QString("11");
+    map->put(str, 11);
     return 0;
 }

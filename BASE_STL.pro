@@ -1,3 +1,5 @@
+QT       += core gui
+TARGET = BASE_STL
 SOURCES += \
     main.cpp
 
@@ -11,7 +13,9 @@ HEADERS += \
     GraphVisualization.h \
     AVLTree.h \
     NodeFactory.h \
-    QueryList.h
+    QueryList.h \
+    HashMap.h
+
 
 
 

@@ -10,14 +10,14 @@ template <class T> class AVLTree : public BinaryTree<T> {
 public:
 
     AVLTree() {
-        this->setIsAVL(true);
-        root = new AVLNode<T>();
+       ((BinaryTree<T>*)this)->setIsAVL(true);
+        setRoot(new AVLNode<T>());
     }
 
     void insert(int key) {
         Stack<AVLNode<T>*>* trip = new Stack<AVLNode<T>*>();
         Stack<int>* leftOrRight = new Stack<int>(); //0 - left, 1 - right
-        trip->push(root);
+        trip->push(getRoot());
         while(true) {
             AVLNode<T>* cur = trip->peek();
             int curKey = cur->getKey();
@@ -58,12 +58,10 @@ public:
     }
 
     AVLNode<T>* getRoot() {
-        return root;
+        return (AVLNode<T>*)((BinaryTree<T>*)this)->getRoot();
     }
 
 private :
-    bool _isAVL;
-    AVLNode<T>* root;
 
 };
 
