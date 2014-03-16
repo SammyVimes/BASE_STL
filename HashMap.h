@@ -8,7 +8,7 @@ template <class K, class V> class HashMap {
 public:
 
     HashMap() {
-        hashTable = hashTableLast = NULL;
+        hashTable = NULL;
     }
 
     class Entry {
@@ -27,21 +27,6 @@ public:
         EntryList() {
             after = NULL;
             first = NULL;
-        }
-
-        void remove(const K& key) {
-            Entry* prev = first;
-            for (Entry* en = first; en != NULL; en = en->next) {
-                if (key == en->key) {
-                    prev->next = en->next;
-                    if (first == en) {
-                        first = NULL;
-                    }
-                    delete en;
-                    break;
-                }
-                prev = en;
-            }
         }
 
         Entry* first;
@@ -67,13 +52,8 @@ public:
             newEntryList->hash = hash;
             Entry* entry = new Entry(key, data);
             newEntryList->first = entry;
-            if (hashTable == NULL) {
-                hashTable = newEntryList;
-                hashTableLast = hashTable;
-            } else {
-                hashTableLast->after = newEntryList;
-                hashTableLast = hashTableLast->after;
-            }
+            newEntryList->after = hashTable;
+            hashTable = newEntryList;
         }
     }
 
@@ -87,20 +67,48 @@ public:
                 }
             }
         }
-        return NULL; //А если V == int|float|etc?
+        return NULL; //what if V == int|float|etc?
     }
 
-    void remove(const K key) {
-
+    void remove(const K& key) {
+        size_t hash = hashCode(key);
+        V returnValue = NULL;
+        EntryList* entryList = getEntryListForHash(hash);
+        if (entryList != NULL) {
+            Entry* prev = entryList->first;
+            for (Entry* en = entryList->first; en != NULL; en = en->next) {
+                if (en->key == key) {
+                    if (en == prev) { //so "en" is "first"
+                        entryList->first = en->next;
+                    } else {
+                        prev->next = en->next;
+                    }
+                    returnValue = en->value;
+                    break;
+                }
+                prev = en;
+            }
+        }
+        return returnValue;
     }
 
     ~HashMap() {
+        EntryList* el = hashTable;
+        while (el != NULL) {
+            EntryList* after = el->after;
+            Entry* en = el->first;
+            while (en != NULL) {
+                Entry* next = en->next;
+                delete en;
+                en = next;
+            }
+            delete el;
+            el = after;
+        }
     }
 
 private:
-    EntryList* hashTableLast;
     EntryList* hashTable;
-
 
     EntryList* getEntryListForHash(const size_t hash) {
         for (EntryList* curList = hashTable; curList != NULL; curList = curList->after) {
@@ -115,6 +123,8 @@ private:
 
 template <class K>
 size_t hashCode(const K& key);
+
+//basic specifications
 
 template <> size_t hashCode<QString>(const QString& key) {
     size_t hash = 0;
