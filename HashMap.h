@@ -1,6 +1,8 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
+#include "Iterator.h"
+
 namespace containers {
 
 template <class K, class V> class HashMap {
@@ -70,7 +72,7 @@ public:
         return NULL; //what if V == int|float|etc?
     }
 
-    void remove(const K& key) {
+    V remove(const K& key) {
         size_t hash = hashCode(key);
         V returnValue = NULL;
         EntryList* entryList = getEntryListForHash(hash);
@@ -84,9 +86,13 @@ public:
                         prev->next = en->next;
                     }
                     returnValue = en->value;
+                    delete en;
                     break;
                 }
                 prev = en;
+            }
+            if (entryList->first == NULL) {
+                removeEntryListWithHash(hash);
             }
         }
         return returnValue;
@@ -107,6 +113,56 @@ public:
         }
     }
 
+    class MapIterator : public Iterator<V> {
+    public:
+
+        MapIterator(EntryList* hashTable) {
+            curEntryList = hashTable;
+            curEntry = hashTable->first;
+        }
+
+        V next() {
+            if (curEntry == NULL) {
+                return NULL;
+            }
+            if (curEntry->next == NULL) {
+                if (curEntryList->after == NULL) {
+                    return NULL;
+                }
+                curEntryList = curEntryList->after;
+                curEntry = curEntryList->first;
+            } else {
+                curEntry = curEntry->next;
+            }
+            return curEntry->value;
+        }
+
+        bool hasNext() {
+            bool has = false;
+            if (curEntry != NULL && curEntry->next != NULL) {
+                has = true;
+            } else if (curEntryList != NULL && curEntryList->after != NULL) {
+                has = true;
+            }
+            return has;
+        }
+
+        V current() {
+            if (curEntry == NULL) {
+                return NULL;
+            }
+            return curEntry->value;
+        }
+
+    private:
+        EntryList* curEntryList;
+        Entry* curEntry;
+    };
+
+    Iterator<V>*  iterator() {
+        return new MapIterator(hashTable);
+    }
+
 private:
     EntryList* hashTable;
 
@@ -117,6 +173,22 @@ private:
             }
         }
         return NULL;
+    }
+
+    void removeEntryListWithHash(const size_t hash) {
+        EntryList* prev = hashTable;
+        for (EntryList* curList = hashTable; curList != NULL; curList = curList->after) {
+            if (curList != NULL && curList->hash == hash) {
+                if (hashTable == curList) {
+                    hashTable = curList->after;
+                } else {
+                    prev->after = curList->after;
+                }
+                delete curList;
+                break;
+            }
+            prev = curList;
+        }
     }
 
 };

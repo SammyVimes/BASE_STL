@@ -17,5 +17,11 @@ int main() {
     map->put(str, 10);
     str = QString("11");
     map->put(str, 11);
+    Iterator<int>* iter = map->iterator();
+    int val = iter->current();
+    while (iter->hasNext()) {
+        val = iter->next();
+    }
+    iter->next();
     return 0;
 }

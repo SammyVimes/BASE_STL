@@ -14,7 +14,8 @@ HEADERS += \
     AVLTree.h \
     NodeFactory.h \
     QueryList.h \
-    HashMap.h
+    HashMap.h \
+    Iterator.h
 
 
 
